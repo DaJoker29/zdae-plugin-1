@@ -27,8 +27,19 @@ function replicate() {
   status_header(200);
   // TODO: Create new site with wpmu_create_blog() and then redirect to that page.
   $alias = $_POST['alias'];
-  wp_redirect( get_site_url( get_current_blog_id(), $alias) );
-  exit();
+  $blog_details = get_blog_details( get_current_blog_id );
+
+  $domain = $blog_details->domain;
+  $path = $alias;
+  $title = "$alias's site";
+  $admin = get_admin_users_for_domain( $domain )[1];
+  $user_id = $admin;
+
+  die("Server Received '{$user_id}' from your browser");
+
+  // wpmu_create_blog( $blog_details->domain, ''$alias )
+  // wp_redirect( get_site_url( get_current_blog_id(), $alias) );
+  // exit();
   // die("Server Received '{$_POST['alias']}' from your browser");
 }
 
