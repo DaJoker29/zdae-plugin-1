@@ -28,5 +28,4 @@ function replicate() {
   die("Server Received '{$_POST['alias']}' from your browser");
 }
 
-function replicator(action)
  ?>
