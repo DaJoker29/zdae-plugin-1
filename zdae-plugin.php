@@ -25,21 +25,20 @@ add_action( 'admin_post_zdae_replicator_action', 'replicate' );
 
 function replicate() {
   status_header(200);
-  // TODO: Create new site with wpmu_create_blog() and then redirect to that page.
   $alias = $_POST['alias'];
   $blog_details = get_blog_details( get_current_blog_id );
 
   $domain = $blog_details->domain;
   $path = $alias;
-  $title = "$alias's site";
+  $title = $alias;
   $user_id = 1;
 
 
   wpmu_create_blog( $domain, $path, $title, $user_id );
+
+  // TODO: Check if blog creation was successful. If so, redirect there. Otherwise, handle error.
   wp_redirect( get_site_url( get_current_blog_id(), $alias) );
   exit();
-  // die("Server Received '{$user_id}' from your browser");
-  // die("Server Received '{$_POST['alias']}' from your browser");
 }
 
  ?>
