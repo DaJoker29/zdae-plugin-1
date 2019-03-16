@@ -33,7 +33,7 @@ function replicate() {
   $path = $alias;
   $title = "$alias's site";
   $admin = get_super_admins()[0];
-  $user_id = $admin;
+  $user_id = $admin->user_id;
 
   die("Server Received '{$user_id}' from your browser");
 
