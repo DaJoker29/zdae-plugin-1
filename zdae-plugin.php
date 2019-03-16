@@ -25,6 +25,7 @@ add_action( 'admin_post_zdae_replicator_action', 'replicate' );
 
 function replicate() {
   status_header(200);
+  // TODO: Create new site with wpmu_create_blog() and then redirect to that page.
   die("Server Received '{$_POST['alias']}' from your browser");
 }
 
