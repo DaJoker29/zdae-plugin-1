@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 function replicator_handler() {
-  $alias = get_query_var( 'alias' );
+  $alias = $_GET['alias'];
   return "alias is $alias";
 }
 
