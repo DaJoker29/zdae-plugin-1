@@ -32,7 +32,7 @@ function replicate() {
   // $domain = $blog_details->domain;
   $path = $alias;
   $title = "$alias's site";
-  $admin = get_super_admins()[1];
+  $admin = get_super_admins()[0];
   $user_id = $admin;
 
   die("Server Received '{$user_id}' from your browser");
