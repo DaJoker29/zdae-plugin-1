@@ -27,12 +27,12 @@ function replicate() {
   status_header(200);
   // TODO: Create new site with wpmu_create_blog() and then redirect to that page.
   $alias = $_POST['alias'];
-  $blog_details = get_blog_details( get_current_blog_id );
+  // $blog_details = get_blog_details( get_current_blog_id );
 
-  $domain = $blog_details->domain;
+  // $domain = $blog_details->domain;
   $path = $alias;
   $title = "$alias's site";
-  $admin = get_admin_users_for_domain( $domain )[1];
+  $admin = get_super_admins()[1];
   $user_id = $admin;
 
   die("Server Received '{$user_id}' from your browser");
