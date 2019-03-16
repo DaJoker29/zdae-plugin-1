@@ -28,6 +28,7 @@ function replicate() {
   // TODO: Create new site with wpmu_create_blog() and then redirect to that page.
   $alias = $_POST['alias'];
   wp_redirect( get_site_url( get_current_blog_id(), $alias) );
+  exit();
   // die("Server Received '{$_POST['alias']}' from your browser");
 }
 
