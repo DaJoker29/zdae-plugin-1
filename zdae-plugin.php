@@ -6,19 +6,23 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 function replicator_handler() {
-  $alias = $_GET['alias'];
+    if ( isset($_GET['alias'] ) ) {
+      $alias = $_GET['alias'];
 
-  // TODO: Display a different form if the ALIAS field isn't provided.
+      echo '<div>';
+      echo 'Your current alias is <strong>'.$alias.'</strong>';
+      echo '</div>';
 
-  echo '<div>';
-  echo 'Your current alias is <strong>'.$alias.'</strong>';
-  echo '</div>';
-
-  echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
-  echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
-  echo '<input type="hidden" name="alias" value="'.$alias.'" />';
-  echo '<input type="submit" value="Create Website" />';
-  echo '</form>';
+      echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
+      echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
+      echo '<input type="hidden" name="alias" value="'.$alias.'" />';
+      echo '<input type="submit" value="Create Website" />';
+      echo '</form>';
+    } else {
+        echo '<div>';
+        echo 'No user provided to create a website.';
+        echo '</div>';
+    }
 }
 add_shortcode( 'replicator', 'replicator_handler' );
 
@@ -27,10 +31,10 @@ function replicate() {
   $alias = $_POST['alias'];
   $blog_details = get_blog_details( get_current_blog_id() );
 
-  $domain = $blog_details->domain; // TODO: Verify this is working.
+  $domain = $blog_details->domain; 
   $path = $alias;
   $title = $alias;
-  $user_id = 1; // FIXME: fetch super admin id and user that instead.
+  $user_id = 1; // FIXME: fetch super admin id and use that instead.
 
 
   wpmu_create_blog( $domain, $path, $title, $user_id );
