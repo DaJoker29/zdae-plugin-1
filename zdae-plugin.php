@@ -26,6 +26,26 @@ function replicator_handler() {
 }
 add_shortcode( 'replicator', 'replicator_handler' );
 
+function zdae_clone($domain,$path,$title,$user_id) {
+	
+	$_POST['action'] = 'process';
+	$_POST['clone_mode'] = 'core';
+	$_POST['source_id'] = get_blog_details('template')->blog_id;
+	$_POST['target_name'] = $path;
+	$_POST['target_title'] = $title;
+	$_POST['disable_addons'] = true;
+	$_POST['clone_nonce'] = wp_create_nonce('ns_cloner');
+	
+	$ns_site_cloner = new ns_cloner();
+	$ns_site_cloner->process();
+
+	$site_id = $ns_site_cloner->target_id;
+	$site_info = get_blog_details( $site_id );
+	if ( $site_info ) {
+		// Clone successful!
+	}
+}
+
 function replicate() {
   status_header(200);
   $alias = $_POST['alias'];
@@ -37,7 +57,8 @@ function replicate() {
   $user_id = 1; // FIXME: fetch super admin id and use that instead.
 
 
-  wpmu_create_blog( $domain, $path, $title, $user_id );
+  // wpmu_create_blog( $domain, $path, $title, $user_id );
+  zdae_clone($domain,$path,$title,$user_id);
 
   // TODO: Check if blog creation was successful. If so, redirect there. Otherwise, handle error.
 
