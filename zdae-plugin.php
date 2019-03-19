@@ -5,24 +5,55 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-function replicator_handler() {
-    if ( isset($_GET['alias'] ) ) {
-      $alias = $_GET['alias'];
-
-      echo '<div>';
-      echo 'Your current alias is <strong>'.$alias.'</strong>';
-      echo '</div>';
-
-      echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
-      echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
-      echo '<input type="hidden" name="alias" value="'.$alias.'" />';
-      echo '<input type="submit" value="Create Website" />';
-      echo '</form>';
+function siteExists($alias) {
+    $args = array(
+        'path' => '/'.$alias.'/',
+        'count' => true
+    );
+    $result = get_sites($args);
+    if ( $result > 0 ) {
+        return true;
     } else {
-        echo '<div>';
-        echo 'No user provided to create a website.';
-        echo '</div>';
+        return false;
     }
+}
+
+function replicator_handler() {
+    $alias;
+    if ( isset($_GET['alias'] ) && $_GET['alias']) {
+        $alias = $_GET['alias'];
+    }
+
+    if( is_multisite() ) {
+
+        if ( isset($alias) && !siteExists($alias) ) {
+            // Display form if site does not exist.
+          echo '<div>';
+          echo 'Your current alias is <strong>'.$alias.'</strong>';
+          echo '</div>';
+
+          echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
+          echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
+          echo '<input type="hidden" name="alias" value="'.$alias.'" />';
+          echo '<input type="submit" value="Create Website" />';
+          echo '</form>';
+        } elseif ( isset($alias) ) {
+            // Display a notice that the site already exists and display a link to it.
+            $url = get_site_url(get_current_blog_id(), $alias);
+            echo '<div>';
+            echo 'The site already exists';
+            echo '</div>';
+            echo '<a href="'.$url.'">'.$url.'</a>';
+        } else {
+            // Display an error if someone navigates to the page directly.
+            echo '<div>';
+            echo 'No user provided to create a website.';
+            echo '</div>';
+        }
+    } else {
+        exit('Not a multisite build');
+    }
+    
 }
 add_shortcode( 'replicator', 'replicator_handler' );
 
