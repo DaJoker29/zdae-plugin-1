@@ -61,7 +61,8 @@ function zdae_clone($domain,$path,$title,$user_id) {
 	
 	$_POST['action'] = 'process';
 	$_POST['clone_mode'] = 'core';
-	$_POST['source_id'] = get_blog_details('template')->blog_id;
+	$_POST['source_id'] = 1;
+  // $_POST['source_id'] = get_blog_details('template')->blog_id;
 	$_POST['target_name'] = $path;
 	$_POST['target_title'] = $title;
 	$_POST['disable_addons'] = true;
