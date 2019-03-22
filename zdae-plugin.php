@@ -96,6 +96,7 @@ function replicate() {
 
   $newID = get_blog_details( $alias );
 
+  wp_redirect( get_site_url( get_current_blog_id(), $alias) );
   // Broadcast all pages to the new child
   switch_to_blog( 1 );
   $pages = get_pages();
@@ -106,8 +107,6 @@ function replicate() {
   }
   restore_current_blog();
 
-
-  wp_redirect( get_site_url( get_current_blog_id(), $alias) );
   exit();
 }
 add_action( 'admin_post_zdae_replicator_action', 'replicate' );
