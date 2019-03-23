@@ -115,7 +115,7 @@ add_action( 'admin_post_zdae_replicator_action', 'replicate' );
 
 add_action( 'elementor/editor/after_save', function( $post_id ) {
   ThreeWP_Broadcast()->api()->update_children( $post_id );
-}
+});
 
 
 
