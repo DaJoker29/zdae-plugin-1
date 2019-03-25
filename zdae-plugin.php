@@ -34,16 +34,21 @@ function replicator_handler() {
 
           echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
 
+          // TODO: make label text editable from the admin page.
           echo '<div>';
-          echo '<input type="checkbox" name="display_phone" checked />';
-          echo '<label for="display_phone">Show your phone number on your affiliate website</label>';
-          echo '<input type="checkbox" name="display_email" checked />';
-          echo '<label for="display_email">Show your phone number on your affiliate website</label>';
+          echo '<input type="checkbox" name="show_phone" checked />';
+          echo '<label for="show_phone"> Show your phone number on your affiliate website?</label>';
+          echo '</div>';
+          echo '<div>';
+          echo '<input type="checkbox" name="show_email" checked />';
+          echo '<label for="show_email"> Show your email address on your affiliate website?</label>';
           echo '</div>';
 
+          echo '<div>';
           echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
           echo '<input type="hidden" name="alias" value="'.$alias.'" />';
           echo '<input type="submit" value="Create Website" />';
+          echo '</div>';
           echo '</form>';
         } elseif ( isset($alias) ) {
             // Display a notice that the site already exists and display a link to it.
@@ -89,6 +94,8 @@ function zdae_clone($domain,$path,$title,$user_id) {
 function replicate() {
   status_header(200);
   $alias = $_POST['alias'];
+  $show_phone = isset($_POST['show_phone']);
+  $show_email = isset($_POST['show_email']);
   $blog_details = get_blog_details( get_current_blog_id() );
 
   $domain = $blog_details->domain; 
@@ -103,6 +110,11 @@ function replicate() {
   // TODO: Check if blog creation was successful. If so, redirect there. Otherwise, handle error.
 
   $newID = get_blog_details( $alias );
+
+  $created_site = get_blog_details( $alias );
+  add_blog_option($created_site->blog_id, 'zdae_show_phone', $show_phone);
+  add_blog_option($created_site->blog_id, 'zdae_show_email', $show_email);
+
 
   wp_redirect( get_site_url( get_current_blog_id(), $alias) );
   // Broadcast all pages to the new child
@@ -119,6 +131,46 @@ function replicate() {
 }
 add_action( 'admin_post_zdae_replicator_action', 'replicate' );
 
+add_action('admin_menu', 'add_menu_zdae');
+function add_menu_zdae() {
+    add_menu_page('zDae Options', 'zDae Plugin', 'manage_options', 'zdae-plugin', 'zdae_plugin_options');
+}
+
+function zdae_plugin_options() {
+   	if ( !current_user_can( 'manage_options' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+
+	$phone = get_blog_option( get_current_blog_id(), 'zdae_show_phone', true);
+	$email = get_blog_option( get_current_blog_id(), 'zdae_show_email', true);
+
+	echo '<div class="wrap">';
+	echo '<p>Here is where the form would go if I actually had options.</p>';
+
+	if ( $phone == true ) {
+		echo '<p>Phone Visible</p>';
+	}
+
+	if ( $email == true ) {
+		echo '<p>Email Visible</p>';
+	}
+	echo '</div>'; 
+}
+
+add_action('network_admin_menu', 'add_network_menu_zdae');
+function add_network_menu_zdae() {
+    add_menu_page('zDae Options', 'zDae Plugin', 'manage_options', 'zdae-plugin-network', 'zdae_plugin_network_options');
+}
+
+function zdae_plugin_network_options() {
+   	if ( !current_user_can( 'manage_options' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+
+	echo '<div class="wrap">';
+	echo '<p>Here is where the form would go if I actually had options.</p>';
+	echo '</div>'; 
+}
 
 
 add_action( 'elementor/editor/after_save', function( $post_id ) {
