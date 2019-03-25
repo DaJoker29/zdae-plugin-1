@@ -33,6 +33,14 @@ function replicator_handler() {
           echo '</div>';
 
           echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
+
+          echo '<div>';
+          echo '<input type="checkbox" name="display_phone" checked />';
+          echo '<label for="display_phone">Show your phone number on your affiliate website</label>';
+          echo '<input type="checkbox" name="display_email" checked />';
+          echo '<label for="display_email">Show your phone number on your affiliate website</label>';
+          echo '</div>';
+
           echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
           echo '<input type="hidden" name="alias" value="'.$alias.'" />';
           echo '<input type="submit" value="Create Website" />';
