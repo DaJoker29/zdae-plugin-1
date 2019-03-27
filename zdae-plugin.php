@@ -63,17 +63,7 @@ function replicate() {
   restore_current_blog();
 
   wp_redirect( get_site_url( get_current_blog_id(), $alias) );
-  // Broadcast all pages to the new child
-  switch_to_blog( 1 );
-  $pages = get_pages();
-  $api = ThreeWP_Broadcast()->api();
-
-  foreach ( $pages as $page ) {
-    $api->update_children( $page->ID, [ $newID ]);
-  }
-  restore_current_blog();
-
-  exit();
+  exit;
 }
 add_action( 'admin_post_zdae_replicator_action', 'replicate' );
 
