@@ -26,7 +26,7 @@ if ( isset($alias) && !siteExists($alias) ) {
 </div>
 
 <div>
-    <label for="email">Display email?</label>
+<label for="email"><?php echo get_site_option('zdae_network_email_label', 'Display your email address?'); ?></label>
     <input type="radio" name="email" value="true" checked="checked">Yes</input>
     <input type="radio" name="email" value="false">No</input>
 </div>
