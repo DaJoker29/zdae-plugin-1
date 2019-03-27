@@ -20,13 +20,18 @@ if ( isset($alias) && !siteExists($alias) ) {
 <form action="<?php echo admin_url( 'admin-post.php'); ?>" method="post">
 
 <div>
-    <input type="checkbox" name="show_phone" checked />
-    <label for="show_phone"><?php echo get_site_option('zdae_network_phone_label', 'Display your phone number?'); ?></label>
+    <label for="phone"><?php echo get_site_option('zdae_network_phone_label', 'Display your phone number?'); ?></label>
+    <input type="radio" name="phone" value="true" checked="checked">Yes</input>
+    <input type="radio" name="phone" value="false">No</input>
 </div>
+
 <div>
-    <input type="checkbox" name="show_email" checked />
-    <label for="show_email"><?php echo get_site_option('zdae_network_email_label', 'Display your email address?'); ?></label>
+    <label for="email">Display email?</label>
+    <input type="radio" name="email" value="true" checked="checked">Yes</input>
+    <input type="radio" name="email" value="false">No</input>
 </div>
+
+<br>
 
 <div>
     <input type="hidden" name="action" value="zdae_replicator_action" />

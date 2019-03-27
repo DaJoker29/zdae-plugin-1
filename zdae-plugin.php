@@ -35,8 +35,8 @@ function zdae_clone($domain,$path,$title,$user_id) {
 function replicate() {
   status_header(200);
   $alias = $_POST['alias'];
-  $show_phone = isset($_POST['show_phone']);
-  $show_email = isset($_POST['show_email']);
+  $show_phone = $_POST['phone'];
+  $show_email = $_POST['email'];
   $blog_details = get_blog_details( get_current_blog_id() );
 
   $domain = $blog_details->domain; 
@@ -49,8 +49,13 @@ function replicate() {
   $newID = get_blog_details( $alias );
 
   $created_site = get_blog_details( $alias );
-  add_blog_option($created_site->blog_id, 'zdae_show_phone', $show_phone);
-  add_blog_option($created_site->blog_id, 'zdae_show_email', $show_email);
+
+  switch_to_blog ( $created_site->blog_id);
+
+  update_option('zdae_show_phone', $show_phone);
+  update_option('zdae_show_email', $show_email);
+
+  restore_current_blog();
 
   wp_redirect( get_site_url( get_current_blog_id(), $alias) );
   // Broadcast all pages to the new child
