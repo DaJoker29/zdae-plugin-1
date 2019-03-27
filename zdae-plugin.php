@@ -25,44 +25,7 @@ function replicator_handler() {
     }
 
     if( is_multisite() ) {
-
-        if ( isset($alias) && !siteExists($alias) ) {
-            // Display form if site does not exist.
-          echo '<div>';
-          echo 'Your current alias is <strong>'.$alias.'</strong>';
-          echo '</div>';
-
-          echo '<form action="'.admin_url( 'admin-post.php').'" method="post">';
-
-          // TODO: make label text editable from the admin page.
-          echo '<div>';
-          echo '<input type="checkbox" name="show_phone" checked />';
-          echo '<label for="show_phone"> Show your phone number on your affiliate website?</label>';
-          echo '</div>';
-          echo '<div>';
-          echo '<input type="checkbox" name="show_email" checked />';
-          echo '<label for="show_email"> Show your email address on your affiliate website?</label>';
-          echo '</div>';
-
-          echo '<div>';
-          echo '<input type="hidden" name="action" value="zdae_replicator_action" />';
-          echo '<input type="hidden" name="alias" value="'.$alias.'" />';
-          echo '<input type="submit" value="Create Website" />';
-          echo '</div>';
-          echo '</form>';
-        } elseif ( isset($alias) ) {
-            // Display a notice that the site already exists and display a link to it.
-            $url = get_site_url(get_current_blog_id(), $alias);
-            echo '<div>';
-            echo 'The site already exists';
-            echo '</div>';
-            echo '<a href="'.$url.'">'.$url.'</a>';
-        } else {
-            // Display an error if someone navigates to the page directly.
-            echo '<div>';
-            echo 'No user provided to create a website.';
-            echo '</div>';
-        }
+        include 'finish-form.php';
     } else {
         exit('Not a multisite build');
     }
@@ -157,19 +120,43 @@ function zdae_plugin_options() {
 	echo '</div>'; 
 }
 
-add_action('network_admin_menu', 'add_network_menu_zdae');
-function add_network_menu_zdae() {
-    add_menu_page('zDae Options', 'zDae Plugin', 'manage_options', 'zdae-plugin-network', 'zdae_plugin_network_options');
+add_action('network_admin_menu', 'add_zdae_network_page');
+function add_zdae_network_page() {
+    $page_title = 'zDae Options';
+    $menu_title = 'zDae Replication';
+    $capability = 'manage_options';
+    $menu_slug = 'zdae_network_options';
+    $function = 'zdae_network_options_display';
+    $icon_url = '';
+    $position = 2;
+
+    add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 }
 
-function zdae_plugin_network_options() {
+function zdae_network_options_display() {
    	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 
-	echo '<div class="wrap">';
-	echo '<p>Here is where the form would go if I actually had options.</p>';
-	echo '</div>'; 
+    if (isset($_POST['phone_label'])) {
+        $phone_label = $_POST['phone_label'];
+        update_site_option('zdae_network_phone_label', $phone_label);
+    }
+
+    if (isset($_POST['email_label'])) {
+        $email_label = $_POST['email_label'];
+        update_site_option('zdae_network_email_label', $email_label);
+    }
+
+    if (isset ($_POST['reset'])) {
+        delete_site_option('zdae_network_phone_label');
+        delete_site_option('zdae_network_email_label');
+    }
+
+    $phone_label = get_site_option( 'zdae_network_phone_label', 'Display your phone number?' );
+    $email_label = get_site_option( 'zdae_network_email_label', 'Display your email address?' );
+
+    include 'network-options.php';
 }
 
 
