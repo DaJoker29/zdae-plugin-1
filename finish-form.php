@@ -30,7 +30,7 @@ if ( isset($alias) && !siteExists($alias) ) {
 
 <div>
     <input type="hidden" name="action" value="zdae_replicator_action" />
-    <input type="hidden" name="alias" value="'.$alias.'" />
+    <input type="hidden" name="alias" value="<?php echo $alias; ?>" />
     <input type="submit" value="Create Website" />
 </div>
 </form>
