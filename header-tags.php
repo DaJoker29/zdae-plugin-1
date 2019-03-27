@@ -1,5 +1,5 @@
+<p style="text-align: right;">::FULL_NAME::</p>
 <?php 
-
 if ( !(get_option('zdae_show_email') === "false")) { ?>
 <p style="text-align: right;">::HOME_EMAIL::</p>
 <?php } 
