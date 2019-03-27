@@ -19,6 +19,11 @@ function replicator_handler() {
 }
 add_shortcode( 'replicator', 'replicator_handler' );
 
+function personal_info_handler() {
+    include 'header-tags.php';
+}
+add_shortcode('zdae_header_tags', 'personal_info_handler');
+
 function zdae_clone($domain,$path,$title,$user_id) {
 	$_POST['action'] = 'process';
 	$_POST['clone_mode'] = 'core';
