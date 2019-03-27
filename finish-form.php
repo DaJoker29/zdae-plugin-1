@@ -1,5 +1,18 @@
 <?php
-        if ( isset($alias) && !siteExists($alias) ) {
+
+function siteExists($alias) {
+    $args = array(
+        'path' => '/'.$alias.'/',
+        'count' => true
+    );
+    $result = get_sites($args);
+    if ( $result > 0 ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+if ( isset($alias) && !siteExists($alias) ) {
 ?>
 <div>
     <p>Your current alias is <strong><?php echo $alias; ?></strong></p>
